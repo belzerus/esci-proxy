@@ -1,4 +1,4 @@
-# Setup and configure Embedded Simple Continues Integration (ESCI) Proxy Board
+# Setup and configure Embedded Simple Continuous Integration (ESCI) Proxy Board
 
 This repo contains ansible playbooks to setup, configure and maintain esci proxy boards,
 that act as a proxy board to communicate with embedded devices for example within CI/CD.
@@ -12,7 +12,7 @@ To setup a new board from scratch below steps is needed.
 
 ### Prepare target proxy board
 
-** NOTE: Only tested on rpi using Raspberry Pi OS Lite (former Rasbian) **
+**NOTE: Only tested on rpi using Raspberry Pi OS Lite (former Rasbian)**
 
  1. Install a linux system on the target (for example Rasbian if using a RPI device)
  2. Ensure that the target device has `ssh-server` and `python` installed
