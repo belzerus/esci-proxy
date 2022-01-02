@@ -1,0 +1,78 @@
+---
+
+- name: Setup a new host
+  hosts: unconfigured
+
+  tasks:
+
+  - name: Configure sshd
+    lineinfile:
+      path: "/etc/ssh/sshd_config"
+      regex: "^(#)?{{item.key}}"
+      line: "{{item.key}} {{item.value}}"
+      state: present
+    loop:
+      - { key: "PermitRootLogin", value: "no" }
+      - { key: "PasswordAuthentication", value: "no" } 
+    notify:
+      - restart sshd
+    become_method: sudo
+    become: yes
+
+  - name: Add '{{ ansible_user_id }}' to required groups
+    user:
+      name: '{{ ansible_user_id }}'
+      groups: dialout
+      append: yes
+
+  - name: Set Hostname
+    shell: hostnamectl set-hostname '{{ hostname  }}'
+    when: hostname is defined
+    become_method: sudo
+    become: yes
+
+  - name: Update /etc/hosts
+    lineinfile:
+      path: "/etc/hosts"
+      regex: "^(#)?{{item.key}}"
+      line: "{{item.key}} {{item.value}}"
+      state: present
+    loop:
+      - { key: "127.0.1.1", value: '{{ hostname  }}'}
+    when: hostname is defined
+    become_method: sudo
+    become: yes
+
+  - name: Reload dhcp server
+    service:
+      name: dhcpcd
+      state: restarted
+    when: hostname is defined
+    become_method: sudo
+    become: yes
+
+  handlers:
+  - name: restart sshd
+    service:
+      name: ssh
+      state: restarted
+    become_method: sudo
+    become: yes
+
+- name: Install components
+  hosts: configured
+
+  tasks:
+  
+  - name: Install apt packages
+    apt:
+        name:
+            - vim-tiny
+            - git
+            - avahi-daemon
+            - libnss-mdns
+            - picocom
+        state: present
+        update_cache: "yes"
+    become_method: sudo
+    become: yes
