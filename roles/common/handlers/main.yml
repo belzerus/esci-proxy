@@ -1,0 +1,16 @@
+---
+- name: "Restart openssh-server"
+  service:
+    name: ssh
+    state: restarted
+  become_method: sudo
+  become: true
+  listen: restart_openssh
+
+- name: "Restart dhcp"
+  service:
+    name: dhcpcd
+    state: restarted
+  become_method: sudo
+  become: true
+  listen: restart_dhcp

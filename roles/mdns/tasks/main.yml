@@ -1,0 +1,29 @@
+---
+- name: Set Hostname
+  command: hostnamectl set-hostname '{{ hostname }}'
+  when: hostname is defined
+  become_method: sudo
+  become: true
+
+- name: Update /etc/hosts
+  lineinfile:
+    path: "/etc/hosts"
+    regex: "^(#)?{{ item.key }}"
+    line: "{{ item.key }} {{ item.value }}"
+    state: present
+  loop:
+    - {key: "127.0.1.1", value: '{{ hostname  }}'}
+  when: hostname is defined
+  notify: restart_dhcp
+  become_method: sudo
+  become: true
+
+- name: Install mdns packages
+  ansible.builtin.apt:
+    name:
+      - avahi-daemon
+      - libnss-mdns
+    state: present
+    update_cache: "yes"
+  become_method: sudo
+  become: true

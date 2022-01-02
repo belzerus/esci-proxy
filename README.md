@@ -12,6 +12,8 @@ To setup a new board from scratch below steps is needed.
 
 ### Prepare target proxy board
 
+** NOTE: Only tested on rpi using Raspberry Pi OS Lite (former Rasbian) **
+
  1. Install a linux system on the target (for example Rasbian if using a RPI device)
  2. Ensure that the target device has `ssh-server` and `python` installed
  3. Copy ssh-keys to target `ssh-copy-id user@target_ip`
@@ -36,9 +38,17 @@ Run playbook (if hostname is not set, default hostname on target will be used..)
 ansible-playbook -i inventories/servers -u <target_username> site.yml -e "hostname=<hostname>"
 ```
 
-When successful, the board will by default configured with mdns and reachable using <hostname>.local
+When successful, the board will by default be configured with mdns and reachable using <hostname>.local
 remove the target ip from `inventories/servers` **unconfigured** section and add either the local domain
 or ip to the **configured** section.
+
+```
+[unconfigured]
+...
+[configured]
+hostname.local
+...
+```
 
 ## Finalize installation on configured boards
 

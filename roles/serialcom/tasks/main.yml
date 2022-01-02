@@ -1,0 +1,15 @@
+---
+- name: Add '{{ ansible_user_id }}' to required groups
+  user:
+    name: '{{ ansible_user_id }}'
+    groups: dialout
+    append: true
+
+- name: Install serialcom packages
+  ansible.builtin.apt:
+    name:
+      - picocom
+    state: present
+    update_cache: "yes"
+  become_method: sudo
+  become: true

@@ -1,0 +1,14 @@
+---
+- name: Configure sshd
+  lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regex: "^(#)?{{ item.key }}"
+    line: "{{ item.key }} {{ item.value }}"
+    state: present
+  loop:
+    - {key: "PermitRootLogin", value: "no"}
+    - {key: "PasswordAuthentication", value: "no"}
+  notify:
+    - restart_openssh
+  become_method: sudo
+  become: true
