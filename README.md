@@ -1,4 +1,4 @@
-# Setup and configure Embedded Simple Continuous Integration (ESCI) Proxy Board
+# Embedded Simple Continuous Integration (ESCI) Proxy Board
 
 This repo contains ansible playbooks to setup, configure and maintain esci proxy boards,
 that act as a proxy board to communicate with embedded devices for example within CI/CD.
